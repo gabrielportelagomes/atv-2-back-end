@@ -16,6 +16,9 @@ public class Project {
     private String description;
     private String repositoryUrl;
 
+    private Integer upvotes = 0;
+    private Double averageRating = 0.0;
+
     @ManyToOne
     @JoinColumn(name = "profile_id", nullable = false)
     private Profile profile;
