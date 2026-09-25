@@ -1,5 +1,6 @@
 package com.devshowcase.api.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -40,5 +41,16 @@ public class GlobalExceptionHandler {
         body.put("message", ex.getReason());
 
         return ResponseEntity.status(ex.getStatusCode()).body(body);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.CONFLICT.value());
+        body.put("error", "Conflict - Violação de Integridade");
+        body.put("message", "Este registro já existe no sistema. Verifique se você não está enviando um dado duplicado.");
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
     }
 }
